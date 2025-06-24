@@ -1,4 +1,7 @@
 package com.justkidding.www.repository;
 
-public class CommentRepository {
+import com.justkidding.www.model.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 }

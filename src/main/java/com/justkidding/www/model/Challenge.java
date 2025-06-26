@@ -32,15 +32,12 @@ public class Challenge {
 
     private LocalDateTime end_time;
 
-    private int remaining_time;
-
-    public Challenge (String name, String description, User author, Status status, LocalDateTime start_time, LocalDateTime end_time, int duration) {
+    public Challenge (String name, String description, User author, Status status, LocalDateTime start_time, LocalDateTime end_time) {
         this.name = name;
         this.description = description;
         this.author = author;
         this.challenge_status = status;
         this.start_time = start_time;
         this.end_time = end_time;
-        this.remaining_time = duration;
     }
 }

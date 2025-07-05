@@ -1,5 +1,6 @@
 package com.justkidding.www.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justkidding.www.dto.PostDto;
 import com.justkidding.www.model.Post;
 import com.justkidding.www.service.PostService;
@@ -33,12 +34,20 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, "Failed to obtain a post not found!!! 😔💔💔", null));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Post>> createPost (@RequestPart PostDto postDto, @RequestPart MultipartFile file) throws IOException {
+    @PostMapping(value = "/create", consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse<Post>> createPost(
+            @RequestPart("postDto") String postDtoJson,
+            @RequestPart("file") MultipartFile file
+    ) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        PostDto postDto = objectMapper.readValue(postDtoJson, PostDto.class);
+
         Post post = this.postService.createPost(postDto, file);
         if (post != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, "Successfully created post!!! 🎉🎉🎉", post));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse<>(true, "Successfully created post!!! 🎉🎉🎉", post));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false, "Failed to create a post bad request!!! 🎉🎉🎉", null));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(false, "Failed to create a post bad request!!!", null));
     }
 }

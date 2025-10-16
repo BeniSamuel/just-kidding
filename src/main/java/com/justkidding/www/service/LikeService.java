@@ -21,6 +21,20 @@ public class LikeService {
         return this.likeRepository.findAll();
     }
 
+    public Like createLike (LikeDto likeDto) {
+        User user = userService.getUserById(likeDto.getUser_id());
+        if (user == null) {
+            return null;
+        }
+
+        Post post = postService.getPostById(likeDto.getPost_id());
+        if (post == null) {
+            return null;
+        }
+
+        return likeRepository.save(new Like(user, post));
+    }
+
     public Like getLikeById (Long id) {
         return this.likeRepository.findById(id).orElse(null);
     }
@@ -39,21 +53,6 @@ public class LikeService {
             return this.likeRepository.getLikesByAuthor(user);
         }
         return null;
-    }
-
-    public Like createLike (LikeDto likeDto) {
-        User user = this.userService.getUserById(likeDto.getUser_id());
-        if (user == null) {
-            return null;
-        }
-
-        Post post = this.postService.getPostById(likeDto.getPost_id());
-        if (post == null) {
-            return null;
-        }
-
-        Like newLike = new Like(user, post);
-        return this.likeRepository.save(newLike);
     }
 
     public Boolean deleteLike (Long id) {

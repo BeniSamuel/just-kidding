@@ -1,5 +1,6 @@
 package com.justkidding.www.service;
 
+import com.justkidding.www.dto.LikeDto;
 import com.justkidding.www.enums.Role;
 import com.justkidding.www.model.Like;
 import com.justkidding.www.model.Post;
@@ -53,4 +54,34 @@ public class LikeServiceTest {
         Assertions.assertEquals(2, likes_data.size());
         Mockito.verify(likeRepository, Mockito.times(1)).findAll();
     }
+
+    @Test
+    @DisplayName("Testing for creating a like")
+    void createLikeTestShouldReturnLike() {
+        // Arrange
+        LikeDto newLikedto = new LikeDto(1L, 2L);
+        User newUser = new User("Beni Samuel", "benisamuel566@gmail.com", "beni@ish", 798676159, Role.USER);
+        Post newPost = new Post("Dancing", newUser, "moving", "nice work!!!");
+        Like newLike = new Like(newUser, newPost);
+
+        // Mock dependencies
+        Mockito.when(userService.getUserById(newLikedto.getUser_id())).thenReturn(newUser);
+        Mockito.when(postService.getPostById(newLikedto.getPost_id())).thenReturn(newPost);
+        Mockito.when(likeRepository.save(Mockito.any(Like.class))).thenReturn(newLike);
+
+        // Act
+        Like returnedLike = likeService.createLike(newLikedto);
+
+        // Assert
+        Assertions.assertNotNull(returnedLike);
+        Assertions.assertEquals(1, returnedLike.getCount());
+        Assertions.assertEquals(newUser, returnedLike.getAuthor());
+        Assertions.assertEquals(newPost, returnedLike.getPost());
+
+        // Verify interactions
+        Mockito.verify(userService, Mockito.times(1)).getUserById(1L);
+        Mockito.verify(postService, Mockito.times(1)).getPostById(2L);
+        Mockito.verify(likeRepository, Mockito.times(1)).save(Mockito.any(Like.class));
+    }
+
 }

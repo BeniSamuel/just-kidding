@@ -27,7 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/justkidding/auth/register").permitAll()
                         .requestMatchers("/api/justkidding/auth/login").permitAll()
                         .requestMatchers("/api/justkidding/challenge/create").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

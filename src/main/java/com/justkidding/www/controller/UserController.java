@@ -37,7 +37,7 @@ public class UserController {
         if (user != null) {
             return ResponseEntity.ok(new ApiResponse<>(true, "Successfully updated a user!!! 🎉🎉🎉", user));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, "Failed to update a user!!! 😔💔💔", null));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, "Failed to update a user not found!!! 😔💔💔", null));
     }
 
     @DeleteMapping("/delete/{id}")
